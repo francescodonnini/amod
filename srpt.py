@@ -3,10 +3,10 @@ from rpt_job import RptJob
 from slice import JobSlice
 
 
-def rule(jobs: list[Job]) -> list[JobSlice]:
+def rule(jobs: list[Job], start: int = 0) -> list[JobSlice]:
     not_completed: list[RptJob] = list(map(create_rpt_job, jobs))
     schedule: list[JobSlice] = []
-    t = 0
+    t = start
     while len(not_completed) > 0:
         j = min(released(not_completed, t))
         nr = not_released(not_completed, t)
@@ -22,17 +22,17 @@ def rule(jobs: list[Job]) -> list[JobSlice]:
                 amount = j.rpt
                 not_completed.remove(j)
         j.work(amount)
-        add_join(schedule, JobSlice(j.identifier, t, amount))
+        add_join(schedule, JobSlice(j, t, amount))
         t += amount
     return schedule
 
 
 def add_join(schedule: list[JobSlice], j: JobSlice):
-    if len(schedule) == 0 or schedule[-1].identifier != j.identifier:
+    if len(schedule) == 0 or schedule[-1].job != j.job:
         schedule.append(j)
     else:
         i = schedule[-1]
-        schedule[-1] = JobSlice(i.identifier, i.start, i.amount + j.amount)
+        schedule[-1] = JobSlice(i.job, i.start, i.amount + j.amount)
 
 
 def create_rpt_job(j: Job) -> RptJob:

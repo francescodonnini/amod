@@ -1,0 +1,49 @@
+import itertools
+import sys
+import time
+from typing import Iterable
+
+from job import Job
+from slice import JobSlice
+from srpt import rule
+
+
+class Node:
+    def __init__(self, fix: set[JobSlice], lb: int, parent: 'Node' = None):
+        self.fix = fix
+        self.lb = lb
+        self.parent = parent
+
+    def create_child(self, j: Job) -> 'Node':
+        schedule = self.fix.union({JobSlice(j, self.t(), j.duration)})
+        return Node(schedule, objective(schedule), self)
+
+    def unavailable_jobs(self) -> set[Job]:
+        return set(map(lambda s: s.job, self.fix))
+
+    def t(self) -> int:
+        return objective(self.fix)
+
+
+def objective(jobs: Iterable[JobSlice]) -> int:
+    completions: dict[str, int] = {}
+    for j in jobs:
+        completions[j.identifier] = j.start + j.amount
+    return sum(completions.values())
+
+
+def solve(jobs: set[Job], max_time_ns=15*60*10e9) -> (list[Job], int):
+    best_value = sys.maxsize
+    best_sol = None
+    open_nodes = [Node(set(), sys.maxsize)]
+    start = time.clock()
+    elapsed_time = time.perf_counter_ns()
+    while len(open_nodes) > 0 and (elapsed_time - start) < max_time_ns:
+        n = open_nodes.pop()
+        available_jobs = jobs.difference(n.unavailable_jobs())
+        
+        elapsed_time = time.perf_counter_ns()
+
+
+
+
