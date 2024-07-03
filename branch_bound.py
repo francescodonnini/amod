@@ -53,11 +53,12 @@ class Node:
 
 def solve(jobs: set[Job],
           select_policy: Callable[[list[Node]], Node] = min_upper_bound,
-          warm_start: Optional[Tuple[list[JobSlice], int]] = None,
+          warm_start: Tuple[list[JobSlice], int] = ([], sys.maxsize),
           max_time_seconds: int = 15 * 60) -> (list[JobSlice], int):
     max_time_ns: int = max_time_seconds * int(10e9)
-    inc: list[JobSlice] = []
-    val: int = sys.maxsize
+    inc: list[JobSlice]
+    val: int
+    inc, val = warm_start
     best_ub: int = val
     queue = [Node(scheduled=[], unscheduled=jobs)]
     start = t = time.perf_counter_ns()
