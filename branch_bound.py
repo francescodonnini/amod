@@ -1,10 +1,9 @@
 import sys
 import time
-from typing import Tuple, Optional, Callable
+from typing import Tuple, Callable
 
 import objective
 from job import Job
-from selection_policies import min_upper_bound
 from slice import JobSlice
 from srpt import rule
 
@@ -52,7 +51,7 @@ class Node:
 
 
 def solve(jobs: set[Job],
-          select_policy: Callable[[list[Node]], Node] = min_upper_bound,
+          select_policy: Callable[[list[Node]], Node],
           warm_start: Tuple[list[JobSlice], int] = ([], sys.maxsize),
           max_time_seconds: int = 15 * 60) -> (list[JobSlice], int):
     max_time_ns: int = max_time_seconds * int(10e9)
@@ -67,10 +66,11 @@ def solve(jobs: set[Job],
         if n.is_feasible() and n.upper_bound() < val:
             inc = list(n.get_schedule())
             val = n.upper_bound()
-        elif n.upper_bound() < best_ub:
+        if n.upper_bound() < best_ub:
             best_ub = n.upper_bound()
         children: list[Node] = n.create_children()
-        queue.extend(prune(children, best_ub))
+        children = prune(children, best_ub)
+        queue.extend(children)
         t = time.perf_counter_ns()
     if time_out(t - start, max_time_ns):
         print("time out")
@@ -78,8 +78,9 @@ def solve(jobs: set[Job],
 
 
 def prune(nodes: list[Node], best_ub: int) -> list[Node]:
-    nodes = filter(lambda n: n.upper_bound() <= best_ub, nodes)
-    return list(filter(lambda n: not is_dominated(n), nodes))
+    f = filter(lambda n: len(n.get_unscheduled()) > 1, nodes)
+    f = filter(lambda n: not is_dominated(n), f)
+    return list(f)
 
 
 def time_out(elapsed: int, lim: int) -> bool:

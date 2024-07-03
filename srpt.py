@@ -8,7 +8,8 @@ from slice import JobSlice
 def rule(jobs: Iterable[Job], start: int = 0) -> list[JobSlice]:
     not_completed: list[RptJob] = list(map(create_rpt_job, jobs))
     schedule: list[JobSlice] = []
-    t = start
+    m = min(not_completed, key=lambda j: j.release_date)
+    t = max(start, m.release_date)
     while len(not_completed) > 0:
         j = min(released(not_completed, t))
         nr = not_released(not_completed, t)
@@ -25,7 +26,10 @@ def rule(jobs: Iterable[Job], start: int = 0) -> list[JobSlice]:
                 not_completed.remove(j)
         j.work(amount)
         add_join(schedule, JobSlice(j, t, amount))
-        t += amount
+        if len(not_completed) == 0:
+            continue
+        m = min(not_completed, key=lambda j: j.release_date)
+        t = max(t + amount, m.release_date)
     return schedule
 
 
