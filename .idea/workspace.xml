@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c555e125-3f2e-4a3b-a993-6c9121ec4337" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/bb.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/job.py" beforeDir="false" afterPath="$PROJECT_DIR$/job.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/rpt_job.py" beforeDir="false" afterPath="$PROJECT_DIR$/rpt_job.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_bound.py" beforeDir="false" afterPath="$PROJECT_DIR$/branch_bound.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/slice.py" beforeDir="false" afterPath="$PROJECT_DIR$/slice.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/srpt.py" beforeDir="false" afterPath="$PROJECT_DIR$/srpt.py" afterDir="false" />
     </list>
@@ -27,7 +25,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="bb" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -52,7 +50,7 @@
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;bb&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;last_opened_file_path&quot;: &quot;/home/francesco/PycharmProjects/AMOD/main.py&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -120,6 +118,11 @@
       <workItem from="1719834058222" duration="667000" />
       <workItem from="1719838628157" duration="1775000" />
       <workItem from="1719845732110" duration="1338000" />
+      <workItem from="1719918112895" duration="1339000" />
+      <workItem from="1719929371694" duration="2744000" />
+      <workItem from="1719945240233" duration="7252000" />
+      <workItem from="1719993128793" duration="168000" />
+      <workItem from="1719996310077" duration="5538000" />
     </task>
     <servers />
   </component>
@@ -130,30 +133,22 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/srpt.py</url>
-          <line>30</line>
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>17</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/main.py</url>
-          <line>5</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/srpt.py</url>
-          <line>33</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/srpt.py</url>
-          <line>31</line>
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/AMOD$ex0.coverage" NAME="ex0 Coverage Results" MODIFIED="1719435461504" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/AMOD$main.coverage" NAME="main Coverage Results" MODIFIED="1719846595132" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/AMOD$main.coverage" NAME="main Coverage Results" MODIFIED="1720002903578" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

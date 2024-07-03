@@ -18,6 +18,12 @@ class JobSlice:
     def __str__(self):
         return f'Slice("{self.job.identifier}", start={self.start}, amount={self.amount})'
 
+    def completion_time(self) -> int:
+        return self.start + self.amount
+
+    def is_whole(self) -> bool:
+        return self.amount == self.job.duration
+
 
 def load_csv(path: str, jobs: list[Job]) -> list[JobSlice]:
     schedule: list[JobSlice] = []

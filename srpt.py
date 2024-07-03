@@ -1,9 +1,11 @@
+from typing import Iterable
+
 from job import Job
 from rpt_job import RptJob
 from slice import JobSlice
 
 
-def rule(jobs: list[Job], start: int = 0) -> list[JobSlice]:
+def rule(jobs: Iterable[Job], start: int = 0) -> list[JobSlice]:
     not_completed: list[RptJob] = list(map(create_rpt_job, jobs))
     schedule: list[JobSlice] = []
     t = start
