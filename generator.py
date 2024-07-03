@@ -28,15 +28,20 @@ class Uniform(RandomIntegerGenerator):
         return int(self.a + (self.b - self.a) * random.random())
 
 
-def generate_instances(n: int,
-                       release_generator: RandomIntegerGenerator,
-                       duration_generator: RandomIntegerGenerator,
-                       seed: int = 42) -> list[Job]:
-    random.seed(seed)
-    jobs: list[Job] = []
-    for i in range(n):
-        jobs.append(Job(str(i), non_negative(release_generator), positive(duration_generator)))
-    return jobs
+class InstancesGenerator:
+    def __init__(self,
+                 release_generator: RandomIntegerGenerator,
+                 duration_generator: RandomIntegerGenerator,
+                 seed: int = 42):
+        self.release_generator = release_generator
+        self.duration_generator = duration_generator
+        random.seed(seed)
+
+    def generate_instances(self, n: int) -> list[Job]:
+        jobs: list[Job] = []
+        for i in range(n):
+            jobs.append(Job(str(i), non_negative(self.release_generator), positive(self.duration_generator)))
+        return jobs
 
 
 def non_negative(generator: RandomIntegerGenerator) -> int:

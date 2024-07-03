@@ -1,9 +1,11 @@
+import math
+
 import gurobipy as gp
 
 from job import Job
 
 
-def solve(jobs: list[Job]) -> gp.Model:
+def solve(jobs: list[Job]) -> float:
     indexes: list[int] = list(range(len(jobs)))
     releases: list[int] = [jobs[i].release_date for i in indexes]
     durations: list[int] = [jobs[i].duration for i in indexes]
@@ -21,14 +23,15 @@ def solve(jobs: list[Job]) -> gp.Model:
     m.setObjective(gp.quicksum(c[j] for j in indexes), gp.GRB.MINIMIZE)
     m.optimize()
     print_solution(m, x, c, jobs)
-    return m
+    return m.objVal
 
 
 def print_solution(model: gp.Model, x, c, jobs: list[Job]):
     print(f'Solution cost = {model.objVal}')
+    schedule: list[int] = []
     for i in range(len(jobs)):
         for j in range(len(jobs)):
-            print(x[i, j], sep=',')
-        print()
-    for i in range(len(jobs)):
-        print(f'C[{i}]={c[i]}')
+            if not math.isclose(x[i, j].X, 0.0):
+                schedule.append(j + 1)
+    print(', '.join([str(x) for x in schedule]))
+    print(', '.join(str(c[i].X) for i in range(len(jobs))))

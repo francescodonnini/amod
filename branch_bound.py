@@ -74,11 +74,13 @@ def solve(jobs: set[Job],
         t = time.perf_counter_ns()
     if time_out(t - start, max_time_ns):
         print("time out")
+    print(f"time={(t - start) / 10e9 / 60} min")
     return inc, val
 
 
 def prune(nodes: list[Node], best_ub: int) -> list[Node]:
     f = filter(lambda n: len(n.get_unscheduled()) > 1, nodes)
+    f = filter(lambda n: n.upper_bound() <= best_ub, f)
     f = filter(lambda n: not is_dominated(n), f)
     return list(f)
 
