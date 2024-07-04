@@ -63,17 +63,16 @@ def solve(jobs: set[Job],
     inc: list[JobSlice]
     val: int
     inc, val = warm_start
-    best_ub: int = val
     queue = [Node(scheduled=[], unscheduled=jobs)]
     start = t = time.perf_counter_ns()
     while not time_out(t - start, max_time_ns) and len(queue) > 0:
         n = select_policy(queue)
         if n.is_feasible() and n.upper_bound() < val:
             inc = list(n.get_schedule())
-            best_ub = val = n.upper_bound()
+            val = n.upper_bound()
         if not n.is_leaf():
             children: list[Node] = n.create_children()
-            children = prune(children, best_ub)
+            children = prune(children, val)
             queue.extend(children)
         t = time.perf_counter_ns()
     if time_out(t - start, max_time_ns):
