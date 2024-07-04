@@ -24,6 +24,8 @@ class Node:
         return last.completion_time()
 
     def create_schedule(self, scheduled: list[JobSlice], unscheduled: set[Job]) -> list[JobSlice]:
+        if len(unscheduled) == 0:
+            return list(scheduled)
         return list(scheduled) + rule(unscheduled, self.t())
 
     def create_child(self, j: Job) -> 'Node':
@@ -49,6 +51,9 @@ class Node:
     def is_feasible(self) -> bool:
         return all(map(lambda j: j.is_whole(), self.schedule))
 
+    def is_leaf(self) -> bool:
+        return len(self.unscheduled) == 0
+
 
 def solve(jobs: set[Job],
           select_policy: Callable[[list[Node]], Node],
@@ -65,22 +70,20 @@ def solve(jobs: set[Job],
         n = select_policy(queue)
         if n.is_feasible() and n.upper_bound() < val:
             inc = list(n.get_schedule())
-            val = n.upper_bound()
-        if n.upper_bound() < best_ub:
-            best_ub = n.upper_bound()
-        children: list[Node] = n.create_children()
-        children = prune(children, best_ub)
-        queue.extend(children)
+            best_ub = val = n.upper_bound()
+        if not n.is_leaf():
+            children: list[Node] = n.create_children()
+            children = prune(children, best_ub)
+            queue.extend(children)
         t = time.perf_counter_ns()
     if time_out(t - start, max_time_ns):
         print("time out")
-    print(f"time={(t - start) / 10e9 / 60} min")
+    print(f"time={(t - start) / 10e9} sec")
     return inc, val
 
 
 def prune(nodes: list[Node], best_ub: int) -> list[Node]:
-    f = filter(lambda n: len(n.get_unscheduled()) > 1, nodes)
-    f = filter(lambda n: n.upper_bound() <= best_ub, f)
+    f = filter(lambda n: n.upper_bound() <= best_ub, nodes)
     f = filter(lambda n: not is_dominated(n), f)
     return list(f)
 

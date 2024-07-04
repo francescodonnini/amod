@@ -1,4 +1,4 @@
-from typing import Iterable
+from typing import Iterable, Union
 
 from job import Job
 from rpt_job import RptJob
@@ -8,7 +8,7 @@ from slice import JobSlice
 def rule(jobs: Iterable[Job], start: int = 0) -> list[JobSlice]:
     not_completed: list[RptJob] = list(map(create_rpt_job, jobs))
     schedule: list[JobSlice] = []
-    m = min(not_completed, key=lambda j: j.release_date)
+    m = min(not_completed, key=lambda x: x.release_date)
     t = max(start, m.release_date)
     while len(not_completed) > 0:
         j = min(released(not_completed, t))
@@ -17,20 +17,27 @@ def rule(jobs: Iterable[Job], start: int = 0) -> list[JobSlice]:
             amount = j.rpt
             not_completed.remove(j)
         else:
-            k = min(nr, key=lambda x: x.release_date)
-            c_j = t + j.rpt
-            if c_j > k.release_date:
-                amount = k.release_date - t
-            else:
-                amount = j.rpt
+            amount = j.rpt
+            finish_j: bool = True
+            for i in range(1, j.rpt):
+                k = get_job_with_less_rpt_than(released(not_completed, t + i), j.expected_rpt(i))
+                if k is not None:
+                    amount = i
+                    finish_j = False
+                    break
+            if finish_j:
                 not_completed.remove(j)
         j.work(amount)
         add_join(schedule, JobSlice(j, t, amount))
         if len(not_completed) == 0:
-            continue
-        m = min(not_completed, key=lambda j: j.release_date)
+            break
+        m = min(not_completed, key=lambda x: x.release_date)
         t = max(t + amount, m.release_date)
     return schedule
+
+
+def get_job_with_less_rpt_than(jobs: list[RptJob], rpt: int) -> Union[Job, None]:
+    return next(filter(lambda x: x.rpt < rpt, jobs), None)
 
 
 def add_join(schedule: list[JobSlice], j: JobSlice):
