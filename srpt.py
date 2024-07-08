@@ -1,3 +1,4 @@
+from collections import deque
 from typing import Iterable, Union
 
 from job import Job
@@ -7,40 +8,29 @@ from slice import JobSlice
 
 def rule(jobs: Iterable[Job], start: int = 0) -> list[JobSlice]:
     not_completed: list[RptJob] = list(map(create_rpt_job, jobs))
-    schedule: list[JobSlice] = []
+    schedule: deque[JobSlice] = deque()
     m = min(not_completed, key=lambda x: x.release_date)
     t = max(start, m.release_date)
     while len(not_completed) > 0:
-        j = min(released(not_completed, t))
-        nr = not_released(not_completed, t)
-        if len(list(nr)) == 0:
-            amount = j.rpt
-            not_completed.remove(j)
-        else:
-            amount = j.rpt
-            finish_j: bool = True
+        j = min_released(not_completed, t)
+        amount = j.rpt
+        if len(not_completed) > 1:
             for i in range(1, j.rpt):
-                k = get_job_with_less_rpt_than(released(not_completed, t + i), j.expected_rpt(i))
-                if k is not None:
+                if use_preemption(not_completed, t + i, j.expected_rpt(i)):
                     amount = i
-                    finish_j = False
                     break
-            if finish_j:
-                not_completed.remove(j)
         j.work(amount)
         add_join(schedule, JobSlice(j, t, amount))
+        if j.rpt == 0:
+            not_completed.remove(j)
         if len(not_completed) == 0:
             break
         m = min(not_completed, key=lambda x: x.release_date)
         t = max(t + amount, m.release_date)
-    return schedule
+    return list(schedule)
 
 
-def get_job_with_less_rpt_than(jobs: Iterable[RptJob], rpt: int) -> Union[Job, None]:
-    return next(filter(lambda x: x.rpt < rpt, jobs), None)
-
-
-def add_join(schedule: list[JobSlice], j: JobSlice):
+def add_join(schedule: deque[JobSlice], j: JobSlice):
     if len(schedule) == 0 or schedule[-1].job != j.job:
         schedule.append(j)
     else:
@@ -52,9 +42,16 @@ def create_rpt_job(j: Job) -> RptJob:
     return RptJob(j.identifier, j.release_date, j.duration)
 
 
-def released(jobs: Iterable[RptJob], t: int) -> Iterable[RptJob]:
-    return filter(lambda j: j.release_date <= t and j.rpt > 0, jobs)
+def min_released(jobs: Iterable[RptJob], t: int) -> RptJob:
+    m: Union[RptJob, None] = None
+    for j in jobs:
+        if j.release_date <= t and (m is None or m.rpt > j.rpt):
+            m = j
+    return m
 
 
-def not_released(jobs: Iterable[RptJob], t: int) -> Iterable[RptJob]:
-    return filter(lambda j: j.release_date > t, jobs)
+def use_preemption(jobs: Iterable[RptJob], t: int, rpt: int) -> bool:
+    for j in jobs:
+        if j.release_date == t and j.rpt < rpt:
+            return True
+    return False
