@@ -21,7 +21,7 @@ def rule(jobs: Iterable[Job], start: int = 0) -> list[JobSlice]:
                     break
         j.work(amount)
         add_join(schedule, JobSlice(j, t, amount))
-        if j.rpt == 0:
+        if j.is_completed():
             not_completed.remove(j)
         if len(not_completed) == 0:
             break
