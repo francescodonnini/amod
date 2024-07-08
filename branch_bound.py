@@ -58,7 +58,7 @@ class Node:
 def solve(jobs: set[Job],
           select_policy: Callable[[list[Node]], Node],
           warm_start: Tuple[list[JobSlice], int] = ([], sys.maxsize),
-          max_time_seconds: int = 15 * 60) -> (list[JobSlice], int):
+          max_time_seconds: int = 15 * 60) -> Tuple[list[JobSlice], int, int]:
     max_time_ns: int = max_time_seconds * int(10e9)
     inc: list[JobSlice]
     val: int
@@ -75,10 +75,7 @@ def solve(jobs: set[Job],
             children = prune(children, val)
             queue.extend(children)
         t = time.perf_counter_ns()
-    if time_out(t - start, max_time_ns):
-        print("time out")
-    print(f"time={(t - start) / 10e9} sec")
-    return inc, val
+    return inc, val, t - start
 
 
 def prune(nodes: list[Node], best_ub: int) -> list[Node]:

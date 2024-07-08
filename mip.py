@@ -1,4 +1,5 @@
 import math
+import time
 from typing import Tuple, Union
 
 import gurobipy as gp
@@ -8,9 +9,10 @@ from job import Job
 from slice import JobSlice
 
 
-def solve(jobs: list[Job], verbose: bool = False) -> Union[Tuple[list[JobSlice], int], None]:
+def solve(jobs: list[Job], verbose: bool = False, max_time_seconds: int = 15 * 60) -> Tuple[list[JobSlice], int, int]:
     with gp.Env(empty=True) as env:
         env.setParam('OutputFlag', verbose)
+        env.setParam('TimeLimit', max_time_seconds)
         env.start()
         with gp.Model(env=env) as m:
             indexes: list[int] = list(range(len(jobs)))
@@ -27,17 +29,18 @@ def solve(jobs: list[Job], verbose: bool = False) -> Union[Tuple[list[JobSlice],
             for j in indexes[1:]:
                 m.addConstr(lhs=c[j], sense=gp.GRB.GREATER_EQUAL, rhs=c[j-1] + gp.quicksum(durations[i]*x[i, j] for i in indexes))
             m.setObjective(gp.quicksum(c[j] for j in indexes), gp.GRB.MINIMIZE)
+            start = time.perf_counter_ns()
             m.optimize()
-            return create_schedule(x, c, jobs), int(m.objVal)
+            return create_schedule(x, c, jobs), int(m.objVal), time.perf_counter_ns() - start
 
 
-def create_schedule(x: tupledict[int, Var], c: tupledict[int, Var], jobs: list[Job]) -> list[JobSlice]:
-    schedule = [0] * len(jobs)
+def create_schedule(x: tupledict[Tuple[int, int], Var], c: tupledict[int, Var], jobs: list[Job]) -> list[JobSlice]:
+    schedule: list[Union[JobSlice, None]] = [None] * len(jobs)
     for i in range(len(jobs)):
         for j in range(len(jobs)):
             x_ij = x[i, j].X
             if math.isclose(x_ij, 1.0):
-                c_j = c[j].X
+                c_j = int(c[j].X)
                 schedule[j] = JobSlice(jobs[i], c_j, jobs[i].duration)
     return schedule
 
