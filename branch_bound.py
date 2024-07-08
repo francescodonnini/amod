@@ -28,9 +28,7 @@ class Node:
     def create_schedule(self, scheduled: list[JobSlice], unscheduled: set[Job]) -> list[JobSlice]:
         if len(unscheduled) == 0:
             return list(scheduled)
-        # start = time.perf_counter_ns()
         schedule: list[JobSlice] = rule(unscheduled, self.t())
-        # print(time.perf_counter_ns() - start)
         return list(scheduled) + schedule
 
     def create_child(self, j: Job) -> 'Node':
