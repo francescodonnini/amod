@@ -11,8 +11,10 @@ from srpt import rule
 class Node:
     def __init__(self, scheduled: list[JobSlice], unscheduled: set[Job], last_job: Job = None, parent: 'Node' = None):
         self.scheduled = scheduled
+        self._t = Node.completion_time(scheduled)
         self.unscheduled = unscheduled
         self.schedule = self.create_schedule(self.scheduled, self.unscheduled)
+        self._upper_bound = objective.total_completion_time(self.schedule)
         self.parent = parent
         self.last_job = last_job
 
@@ -26,7 +28,10 @@ class Node:
     def create_schedule(self, scheduled: list[JobSlice], unscheduled: set[Job]) -> list[JobSlice]:
         if len(unscheduled) == 0:
             return list(scheduled)
-        return list(scheduled) + rule(unscheduled, self.t())
+        # start = time.perf_counter_ns()
+        schedule: list[JobSlice] = rule(unscheduled, self.t())
+        # print(time.perf_counter_ns() - start)
+        return list(scheduled) + schedule
 
     def create_child(self, j: Job) -> 'Node':
         scheduled = self.scheduled + [JobSlice(j, max(self.t(), j.release_date), j.duration)]
@@ -43,10 +48,10 @@ class Node:
         return self.unscheduled
 
     def t(self) -> int:
-        return Node.completion_time(self.scheduled)
+        return self._t
 
     def upper_bound(self) -> int:
-        return objective.total_completion_time(self.schedule)
+        return self._upper_bound
 
     def is_feasible(self) -> bool:
         return all(map(lambda j: j.is_whole(), self.schedule))
