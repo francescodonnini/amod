@@ -13,18 +13,12 @@ class Node:
     def __init__(self, scheduled: list[JobSlice], unscheduled: set[Job], last_job: Job = None, parent: 'Node' = None):
         assert all(map(lambda x: x.is_whole(), scheduled))
         self.scheduled = scheduled
-        self._t = Node.completion_time(scheduled)
+        self._t = None
         self.unscheduled = unscheduled
         self.schedule = self.create_schedule(self.scheduled, self.unscheduled)
         self._upper_bound = objective.total_completion_time(self.schedule)
         self.parent = parent
         self.last_job = last_job
-
-    @staticmethod
-    def completion_time(schedule: list[JobSlice]):
-        if len(schedule) == 0:
-            return 0
-        return schedule[-1].completion_time()
 
     def create_schedule(self, scheduled: list[JobSlice], unscheduled: set[Job]) -> list[JobSlice]:
         if len(unscheduled) == 0:
@@ -47,7 +41,15 @@ class Node:
         return self.unscheduled
 
     def t(self) -> int:
+        if self._t is None:
+            self._t = Node.completion_time(self.scheduled)
         return self._t
+
+    @staticmethod
+    def completion_time(schedule: list[JobSlice]):
+        if len(schedule) == 0:
+            return 0
+        return schedule[-1].completion_time()
 
     def upper_bound(self) -> int:
         return self._upper_bound

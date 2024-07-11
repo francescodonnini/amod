@@ -23,10 +23,8 @@ def rule(jobs: Iterable[Job], start: int = 0) -> list[JobSlice]:
         add_join(schedule, JobSlice(j, t, amount))
         if j.is_completed():
             not_completed.remove(j)
-        if len(not_completed) == 0:
-            break
-        m = min(not_completed, key=lambda x: x.release_date)
-        t = max(t + amount, m.release_date)
+        m = min(not_completed, key=lambda x: x.release_date, default=None)
+        t = max(t + amount, m.release_date if m is not None else 0)
     return list(schedule)
 
 

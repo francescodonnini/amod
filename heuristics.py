@@ -5,6 +5,18 @@ from job import Job
 from slice import JobSlice
 
 
+def prtf(jobs: list[Job]) -> list[JobSlice]:
+    return heuristic(jobs, prtf_rule)
+
+
+def ect(jobs: list[Job]) -> list[JobSlice]:
+    return heuristic(jobs, ect_rule)
+
+
+def est(jobs: list[Job]) -> list[JobSlice]:
+    return heuristic(jobs, est_rule)
+
+
 def heuristic(jobs: list[Job], select_job: Callable[[Iterable[Job], int], Job]) -> list[JobSlice]:
     t: int = -sys.maxsize
     unscheduled_jobs: list[Job] = list(jobs)
@@ -17,15 +29,15 @@ def heuristic(jobs: list[Job], select_job: Callable[[Iterable[Job], int], Job]) 
     return schedule
 
 
-def ect(jobs: Iterable[Job], t: int) -> Job:
+def ect_rule(jobs: Iterable[Job], t: int) -> Job:
     return min(sorted(jobs, key=lambda j: ci(j, t)), key=lambda j: ri(j, t))
 
 
-def est(jobs: Iterable[Job], t: int) -> Job:
+def est_rule(jobs: Iterable[Job], t: int) -> Job:
     return min(sorted(jobs, key=lambda j: ri(j, t)), key=lambda j: j.duration)
 
 
-def prtf(jobs: Iterable[Job], t: int) -> Job:
+def prtf_rule(jobs: Iterable[Job], t: int) -> Job:
     return min(sorted(jobs, key=lambda j: prio_rule(j, t)), key=lambda j: ri(j, t))
 
 
