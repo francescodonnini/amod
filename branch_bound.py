@@ -1,6 +1,5 @@
 import sys
 import time
-from collections import defaultdict
 from typing import Tuple, Callable
 
 import objective
@@ -12,6 +11,7 @@ from srpt import rule
 
 class Node:
     def __init__(self, scheduled: list[JobSlice], unscheduled: set[Job], last_job: Job = None, parent: 'Node' = None):
+        assert all(map(lambda x: x.is_whole(), scheduled))
         self.scheduled = scheduled
         self._t = Node.completion_time(scheduled)
         self.unscheduled = unscheduled
@@ -24,8 +24,7 @@ class Node:
     def completion_time(schedule: list[JobSlice]):
         if len(schedule) == 0:
             return 0
-        last = max(schedule, key=lambda j: j.start)
-        return last.completion_time()
+        return schedule[-1].completion_time()
 
     def create_schedule(self, scheduled: list[JobSlice], unscheduled: set[Job]) -> list[JobSlice]:
         if len(unscheduled) == 0:
@@ -95,18 +94,14 @@ def prune(nodes: list[Node], best_ub: int) -> list[Node]:
     parent = nodes[0].parent
     t = parent.t()
     n = len(parent.unscheduled)
-    dominated = defaultdict(lambda: False)
+    dominated = set()
     for n_i in nodes:
-        if rule1(n_i, parent.scheduled, n):
-            dominated[n_i] = True
-            continue
         others = filter(lambda x: x != n_i and x not in dominated, nodes)
-        if any(filter(lambda n_j: rule2(n_i, n_j, t, n - 1), others)):
-            dominated[n_i] = True
-            continue
-        if any(filter(lambda n_j: rule3(n_i, n_j, t, n), others)):
-            dominated[n_i] = True
-    return list(filter(lambda x: x not in dominated, nodes))
+        if len(list(filter(lambda n_j: thm6(n_i, n_j, t, n - 1), others))) > 0:
+            dominated.add(n_i)
+        elif len(list(filter(lambda n_j: thm7(n_i, n_j, t, n), others))) > 0:
+            dominated.add(n_i)
+    return [x for x in nodes if x not in dominated]
 
 
 def is_dominated(node: Node) -> bool:
@@ -114,23 +109,8 @@ def is_dominated(node: Node) -> bool:
     return node.last_job.release_date >= max(j.release_date, node.parent.t()) + j.duration
 
 
-# Thm. 9 (vedi Chu[1992]).
-def rule1(n_i: Node, fixed: list[JobSlice], card: int) -> bool:
-    i = n_i.last_job
-    for k in range(len(fixed)):
-        j = fixed[k].job
-        if j == i:
-            continue
-        tj = delta_j(fixed, k)
-        e_i = e(i, tj)
-        e_j = e(j, tj)
-        if e_i <= e_j and e_i - e_j <= (i.duration - j.duration) * card:
-            return True
-    return False
-
-
 # Thm. 6 (vedi Chu[1992])
-def rule2(m: Node, n: Node, t: int, card: int) -> bool:
+def thm6(m: Node, n: Node, t: int, card: int) -> bool:
     i, j = m.last_job, n.last_job
     e_i = e(i, t)
     e_j = e(j, t)
@@ -138,7 +118,7 @@ def rule2(m: Node, n: Node, t: int, card: int) -> bool:
 
 
 # Thm. 7 (vedi Chu[1992]).
-def rule3(m: Node, n: Node, t: int, card: int) -> bool:
+def thm7(m: Node, n: Node, t: int, card: int) -> bool:
     i = m.last_job
     j = n.last_job
     e_i = e(i, t)
@@ -146,7 +126,38 @@ def rule3(m: Node, n: Node, t: int, card: int) -> bool:
     return e_i <= e_j and i.duration - j.duration <= (e_i - e_j) * card
 
 
-def delta_j(schedule: list[JobSlice], j: int) -> int:
+# Thm. 9 (vedi Chu[1992]).
+def thm9(n_i: Node) -> bool:
+    parent = n_i.parent
+    i = n_i.last_job
+    for k in range(len(parent.scheduled)):
+        j = parent.scheduled[k].job
+        if j != i:
+            d_j = delta(parent.scheduled, k)
+            e_i = e(i, d_j)
+            e_j = e(j, d_j)
+            if e_i <= e_j and e_i - e_j <= (i.duration - j.duration) * len(parent.scheduled):
+                return True
+    return False
+
+
+# Thm. 10 (vedi Chu[1992])
+def thm10(n_i: Node) -> bool:
+    parent = n_i.parent
+    i = n_i.last_job
+    for k in range(len(parent.scheduled)):
+        j = parent.scheduled[k].job
+        p_i = i.duration
+        p_j = j.duration
+        d_j = delta(parent.scheduled, k)
+        e_i = e(i, d_j)
+        e_j = e(j, d_j)
+        if p_i >= p_j and p_i - p_j >= (e_i - e_j) * (len(parent.scheduled) - k + 2):
+            return True
+    return False
+
+
+def delta(schedule: list[JobSlice], j: int) -> int:
     if j == 0:
         return -sys.maxsize
     else:

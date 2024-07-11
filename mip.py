@@ -20,7 +20,7 @@ def solve(jobs: list[Job], verbose: bool = False, max_time_seconds: int = 15 * 6
             releases: list[int] = [jobs[i].release_date for i in indexes]
             durations: list[int] = [jobs[i].duration for i in indexes]
             x = m.addVars(indexes, indexes, vtype=gp.GRB.BINARY, name='x')
-            c = m.addVars(indexes, vtype=gp.GRB.INTEGER, lb=0, ub=gp.GRB.INFINITY, obj=1, name='c')
+            c = m.addVars(indexes, vtype=gp.GRB.INTEGER, lb=0, ub=gp.GRB.INFINITY, name='c')
             for i in indexes:
                 m.addConstr(lhs=gp.quicksum(x[i, j] for j in indexes), sense=gp.GRB.EQUAL, rhs=1)
             for j in indexes:
@@ -31,6 +31,7 @@ def solve(jobs: list[Job], verbose: bool = False, max_time_seconds: int = 15 * 6
                 m.addConstr(lhs=c[j], sense=gp.GRB.GREATER_EQUAL, rhs=c[j-1] + gp.quicksum(durations[i]*x[i, j] for i in indexes))
             m.setObjective(gp.quicksum(c[j] for j in indexes), gp.GRB.MINIMIZE)
             start = time.perf_counter_ns()
+            m: gp.Model
             m.optimize()
             return create_schedule(x, c, jobs), m.objVal, time.perf_counter_ns() - start
 
