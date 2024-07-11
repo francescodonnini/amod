@@ -9,8 +9,9 @@ from job import Job
 from slice import JobSlice
 
 
-def solve(jobs: list[Job], verbose: bool = False, max_time_seconds: int = 15 * 60) -> Tuple[list[JobSlice], int, int]:
+def solve(jobs: list[Job], verbose: bool = False, max_time_seconds: int = 15 * 60, gap: float = 1e-6) -> Tuple[list[JobSlice], float, int]:
     with gp.Env(empty=True) as env:
+        env.setParam('MIPGap', gap)
         env.setParam('OutputFlag', verbose)
         env.setParam('TimeLimit', max_time_seconds)
         env.start()
@@ -31,7 +32,7 @@ def solve(jobs: list[Job], verbose: bool = False, max_time_seconds: int = 15 * 6
             m.setObjective(gp.quicksum(c[j] for j in indexes), gp.GRB.MINIMIZE)
             start = time.perf_counter_ns()
             m.optimize()
-            return create_schedule(x, c, jobs), int(m.objVal), time.perf_counter_ns() - start
+            return create_schedule(x, c, jobs), m.objVal, time.perf_counter_ns() - start
 
 
 def create_schedule(x: tupledict[Tuple[int, int], Var], c: tupledict[int, Var], jobs: list[Job]) -> list[JobSlice]:

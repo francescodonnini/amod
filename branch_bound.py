@@ -24,7 +24,7 @@ class Node:
     def completion_time(schedule: list[JobSlice]):
         if len(schedule) == 0:
             return 0
-        last = max(schedule, key=lambda j: j.start + j.amount)
+        last = max(schedule, key=lambda j: j.start)
         return last.completion_time()
 
     def create_schedule(self, scheduled: list[JobSlice], unscheduled: set[Job]) -> list[JobSlice]:
@@ -118,9 +118,13 @@ def is_dominated(node: Node) -> bool:
 def rule1(n_i: Node, fixed: list[JobSlice], card: int) -> bool:
     i = n_i.last_job
     for k in range(len(fixed)):
-        j = fixed[k]
+        j = fixed[k].job
+        if j == i:
+            continue
         tj = delta_j(fixed, k)
-        if ei(i, tj) <= ei(j.job, tj) and ei(i, tj) - ei(j.job, tj) <= (i.duration - j.amount) * card:
+        e_i = e(i, tj)
+        e_j = e(j, tj)
+        if e_i <= e_j and e_i - e_j <= (i.duration - j.duration) * card:
             return True
     return False
 
@@ -128,18 +132,18 @@ def rule1(n_i: Node, fixed: list[JobSlice], card: int) -> bool:
 # Thm. 6 (vedi Chu[1992])
 def rule2(m: Node, n: Node, t: int, card: int) -> bool:
     i, j = m.last_job, n.last_job
-    e1 = ei(i, t)
-    e2 = ei(j, t)
-    return e1 >= e2 and e1 - e2 >= (i.duration - j.duration) * card
+    e_i = e(i, t)
+    e_j = e(j, t)
+    return e_i >= e_j and e_i - e_j >= (i.duration - j.duration) * card
 
 
 # Thm. 7 (vedi Chu[1992]).
 def rule3(m: Node, n: Node, t: int, card: int) -> bool:
     i = m.last_job
     j = n.last_job
-    e1 = ei(i, t)
-    e2 = ei(j, t)
-    return e1 <= e2 and i.duration - j.duration <= (e1 - e2) * card
+    e_i = e(i, t)
+    e_j = e(j, t)
+    return e_i <= e_j and i.duration - j.duration <= (e_i - e_j) * card
 
 
 def delta_j(schedule: list[JobSlice], j: int) -> int:
@@ -149,12 +153,12 @@ def delta_j(schedule: list[JobSlice], j: int) -> int:
         return schedule[j - 1].completion_time()
 
 
-def ri(i: Job, t: int) -> int:
+def r(i: Job, t: int) -> int:
     return max(i.release_date, t)
 
 
-def ei(i: Job, t: int) -> int:
-    return ri(i, t) + i.duration
+def e(i: Job, t: int) -> int:
+    return r(i, t) + i.duration
 
 
 def time_out(elapsed: int, lim: int) -> bool:
