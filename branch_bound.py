@@ -59,11 +59,6 @@ class Node:
     def is_leaf(self) -> bool:
         return len(self.unscheduled) == 0
 
-    def fixed_scheduled_completion(self) -> int:
-        if len(self.scheduled) == 0:
-            return 0
-        return self.scheduled[-1].completion_time()
-
 
 def solve(jobs: set[Job],
           select_policy: Callable[[list[Node]], Node],
@@ -98,7 +93,7 @@ def prune(nodes: list[Node], best_ub: int) -> list[Node]:
     if len(nodes) <= 1:
         return nodes
     parent = nodes[0].parent
-    t = parent.fixed_scheduled_completion()
+    t = parent.t()
     n = len(parent.unscheduled)
     dominated = defaultdict(lambda: False)
     for n_i in nodes:
@@ -142,8 +137,8 @@ def rule2(m: Node, n: Node, t: int, card: int) -> bool:
 def rule3(m: Node, n: Node, t: int, card: int) -> bool:
     i = m.last_job
     j = n.last_job
-    e1 = ei(m, t)
-    e2 = ei(n, t)
+    e1 = ei(i, t)
+    e2 = ei(j, t)
     return e1 <= e2 and i.duration - j.duration <= (e1 - e2) * card
 
 
