@@ -12,12 +12,12 @@ class Info:
         self.time_ns = 0
 
     def __str__(self):
-        s = 'job' + '\t'.join([j.identifier for j in self.instance]) + '\n'
-        s += 'rj' + '\t'.join([str(j.release_date) for j in self.instance]) + '\n'
-        s += 'pj' + '\t'.join([str(j.duration) for j in self.instance]) + '\n'
+        s = 'job\t' + '\t'.join([j.identifier for j in self.instance]) + '\n'
+        s += 'rj\t' + '\t'.join([str(j.release_date) for j in self.instance]) + '\n'
+        s += 'pj\t' + '\t'.join([str(j.duration) for j in self.instance]) + '\n'
         s += f'heuristic={self.heuristic}\n'
         s += f'node_count={self.node_count}\n'
-        return s + f'time={self.time_ns / int(10e9)} ms'
+        return s + f'time={self.time_ns / int(10e9)} s'
 
     def add_node_count(self, c: int):
         if c < 0:
