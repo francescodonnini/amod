@@ -21,6 +21,9 @@ class JobSlice:
     def completion_time(self) -> int:
         return self.start + self.amount
 
+    def get_identifier(self) -> str:
+        return self.job.identifier
+
     def is_whole(self) -> bool:
         return self.amount == self.job.duration
 

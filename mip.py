@@ -9,11 +9,16 @@ from job import Job
 from slice import JobSlice
 
 
-def solve(jobs: list[Job], verbose: bool = False, max_time_seconds: int = 15 * 60, gap: float = 1e-6) -> Tuple[list[JobSlice], float, int]:
+def solve(jobs: list[Job],
+          verbose: bool = False,
+          max_time_seconds: int = 15 * 60,
+          gap: float = 1e-6,
+          integrality_focus: int = 0) -> Tuple[list[JobSlice], float, int]:
     with gp.Env(empty=True) as env:
         env.setParam('MIPGap', gap)
         env.setParam('OutputFlag', verbose)
         env.setParam('TimeLimit', max_time_seconds)
+        env.setParam('IntegralityFocus', integrality_focus)
         env.start()
         with gp.Model(env=env) as m:
             indexes: list[int] = list(range(len(jobs)))
@@ -46,13 +51,3 @@ def create_schedule(x: tupledict[Tuple[int, int], Var], c: tupledict[int, Var], 
                 schedule[j] = JobSlice(jobs[i], c_j, jobs[i].duration)
     return schedule
 
-
-def print_solution(model: gp.Model, x, c, jobs: list[Job]):
-    print(f'Solution cost = {model.objVal}')
-    schedule: list[int] = []
-    for i in range(len(jobs)):
-        for j in range(len(jobs)):
-            if not math.isclose(x[i, j].X, 0.0):
-                schedule.append(j + 1)
-    print(', '.join([str(x) for x in schedule]))
-    print(', '.join(str(c[i].X) for i in range(len(jobs))))
