@@ -142,14 +142,17 @@ def thm7(m: Node, n: Node, t: int, card: int) -> bool:
 def thm9(n_i: Node) -> bool:
     parent: Node = n_i.get_parent()
     i: Job = n_i.get_last_job()
+    p_i: int = i.duration
+    n: int = len(parent.get_unscheduled())
     scheduled: list[JobSlice] = parent.get_scheduled()
     for k in range(len(scheduled)):
         j: Job = scheduled[k].job
         if j != i:
+            p_j: int = j.duration
             d_j: int = delta(scheduled, k)
             e_i: int = e(i, d_j)
             e_j: int = e(j, d_j)
-            if e_i <= e_j and e_i - e_j <= (i.duration - j.duration) * len(scheduled):
+            if e_i <= e_j and e_i - e_j <= (p_i - p_j) * n:
                 return True
     return False
 
@@ -158,10 +161,10 @@ def thm9(n_i: Node) -> bool:
 def thm10(n_i: Node) -> bool:
     parent: Node = n_i.get_parent()
     i: Job = n_i.get_last_job()
+    p_i: int = i.duration
     scheduled: list[JobSlice] = parent.get_scheduled()
     for k in range(len(scheduled)):
         j: Job = scheduled[k].job
-        p_i: int = i.duration
         p_j: int = j.duration
         d_j: int = delta(scheduled, k)
         e_i: int = e(i, d_j)
