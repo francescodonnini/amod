@@ -1,8 +1,8 @@
 from branch_bound import Node
 
 
-def min_upper_bound(nodes: list[Node]) -> Node:
-    m = min(nodes, key=lambda n: n.upper_bound())
+def best_fit(nodes: list[Node]) -> Node:
+    m = min(nodes, key=lambda n: n.value())
     nodes.remove(m)
     return m
 
