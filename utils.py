@@ -2,6 +2,7 @@ import sys
 from typing import Callable, Tuple
 
 import objective
+from generator import Generator
 from job import Job, save_csv
 from slice import JobSlice
 
@@ -18,6 +19,13 @@ def best_heuristic(jobs: list[Job], heuristics: dict[str, Callable[[list[Job]], 
             sol = s
             val = v
     return name, sol, val
+
+
+def generate(generator: Generator, num_of_jobs: int, num_of_instances: int) -> list[list[Job]]:
+    instances: list[list[Job]] = []
+    for k in range(num_of_instances):
+        instances.append(generator.generate_instances(num_of_jobs))
+    return instances
 
 
 def save_all(instances: list[list[Job]], dir_path: str):
