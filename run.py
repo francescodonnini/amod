@@ -1,7 +1,6 @@
 import csv
 import itertools
 import sys
-from collections import defaultdict
 
 import benchmark
 import branch_bound
