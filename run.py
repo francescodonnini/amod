@@ -14,12 +14,11 @@ from selection_policies import fifo, lifo, best_fit
 g1 = HaririPotts()
 g2 = Dummy(duration=(1, 100), release=(0, 10))
 m = 100
-n = 20
-heuristic_usages = defaultdict(int)
 generators = dict([(g1, 'hariri potts'), (g2, 'simple')])
+heuristics_list = dict([('aprtf', aprtf), ('ect', ect), ('est', est), ('prtf', prtf)])
 policies = [lifo, fifo, best_fit]
 warm_start = [False, True]
-instance_sizes = list(range(10, 20, 5))
+instance_sizes = list(range(10, 55, 5))
 with open(f'{m}.csv', 'w') as f:
     writer = csv.writer(f)
     writer.writerow(['scheme', 'policy', 'use_heuristic', 'job_per_instance', 'gurobi_t', 't', 'gurobi_val', 'val', 'node_count', 'best_heuristic'])
@@ -30,13 +29,7 @@ with open(f'{m}.csv', 'w') as f:
         for i in range(m):
             jobs = scheme.generate_instances(n)
             gurobi_sol, gurobi_val, gurobi_t = mip.solve(jobs, integrality_focus=1)
-            if use_warm_start:
-                name, inc, val = utils.best_heuristic(jobs, dict(
-                    [('aprtf', aprtf), ('ect', ect), ('est', est), ('prtf', prtf)]))
-            else:
-                name = 'none'
-                inc = []
-                val = sys.maxsize
+            name, inc, val = utils.best_heuristic(jobs, heuristics_list) if use_warm_start else 'none', [], sys.maxsize
             info = benchmark.Info(set(jobs), name)
             sol, val = branch_bound.solve(set(jobs), policy, info, warm_start=(inc, val))
             row = [policy_name, str(use_warm_start), str(n), str(gurobi_t / int(10e9)), str(info.time_ns / int(10e9)), str(gurobi_val), str(val), str(info.node_count), info.heuristic]
