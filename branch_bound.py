@@ -8,6 +8,7 @@ from benchmark import Info
 from job import Job
 from slice import JobSlice
 from srpt import rule
+from timeout import Timeout
 
 
 class Node:
@@ -92,7 +93,10 @@ def solve(jobs: set[Job],
             benchmark.add_node_count(len(children))
             queue.extend(children)
         t = time.perf_counter_ns()
-    benchmark.set_time(t - start)
+    elapsed = t - start
+    benchmark.set_time(elapsed)
+    if time_out(elapsed, max_time_ns):
+        raise Timeout(inc, val, elapsed)
     return inc, val
 
 

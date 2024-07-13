@@ -7,6 +7,7 @@ from gurobipy import tupledict, Var
 
 from job import Job
 from slice import JobSlice
+from timeout import Timeout
 
 
 def solve(jobs: list[Job],
@@ -38,7 +39,10 @@ def solve(jobs: list[Job],
             start = time.perf_counter_ns()
             m: gp.Model
             m.optimize()
-            return create_schedule(x, c, jobs), m.objVal, time.perf_counter_ns() - start
+            inc, val, elapsed = create_schedule(x, c, jobs), m.objVal, time.perf_counter_ns() - start
+            if m.Status == gp.GRB.TIME_LIMIT:
+                raise Timeout(inc, val, elapsed)
+            return inc, val, elapsed
 
 
 def create_schedule(x: tupledict[Tuple[int, int], Var], c: tupledict[int, Var], jobs: list[Job]) -> list[JobSlice]:
