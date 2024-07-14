@@ -3,350 +3,385 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
-        <entry key="/100.csv">
+        <entry key="/instances/hariri/10/0.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/80.csv">
+        <entry key="/instances/results.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-0.csv">
+        <entry key="/instances/simple/10/99.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-10.csv">
+        <entry key="/instances/simple/12/44.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-12.csv">
+        <entry key="/instances/simple/12/7.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-17.csv">
+        <entry key="/instances/simple/14/13.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-20.csv">
+        <entry key="/instances/simple/14/5.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-21.csv">
+        <entry key="/instances/simple/14/85.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-25.csv">
+        <entry key="/instances/simple/16/16.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-27.csv">
+        <entry key="/instances/simple/16/29.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-29.csv">
+        <entry key="/instances/simple/16/60.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-34.csv">
+        <entry key="/instances/simple/16/85.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-4.csv">
+        <entry key="/instances/simple/16/9.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-44.csv">
+        <entry key="/instances/simple/18/37.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-46.csv">
+        <entry key="/instances/simple/18/45.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-53.csv">
+        <entry key="/instances/simple/18/73.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-56.csv">
+        <entry key="/instances/simple/18/91.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-6.csv">
+        <entry key="/instances/simple/18/92.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-64.csv">
+        <entry key="/instances/simple/20/10.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-66.csv">
+        <entry key="/instances/simple/20/27.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-69.csv">
+        <entry key="/instances/simple/20/34.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-74.csv">
+        <entry key="/instances/simple/20/51.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-78.csv">
+        <entry key="/instances/simple/20/53.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-79.csv">
+        <entry key="/instances/simple/22/2.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/gurobi-9.csv">
+        <entry key="/instances/simple/22/34.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-jobs-0.csv">
+        <entry key="/instances/simple/22/64.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-jobs-4.csv">
+        <entry key="/instances/simple/22/71.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-0.csv">
+        <entry key="/instances/simple/22/86.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-10.csv">
+        <entry key="/instances/simple/24/1.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-12.csv">
+        <entry key="/instances/simple/24/14.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-17.csv">
+        <entry key="/instances/simple/24/17.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-20.csv">
+        <entry key="/instances/simple/24/43.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-21.csv">
+        <entry key="/instances/simple/24/8.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-25.csv">
+        <entry key="/instances/simple/24/81.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-27.csv">
+        <entry key="/instances/simple/24/91.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-29.csv">
+        <entry key="/instances/simple/26/15.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-34.csv">
+        <entry key="/instances/simple/26/27.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-4.csv">
+        <entry key="/instances/simple/26/29.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-44.csv">
+        <entry key="/instances/simple/26/33.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-46.csv">
+        <entry key="/instances/simple/26/49.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-53.csv">
+        <entry key="/instances/simple/26/50.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-56.csv">
+        <entry key="/instances/simple/26/60.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-6.csv">
+        <entry key="/instances/simple/26/64.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-64.csv">
+        <entry key="/instances/simple/26/7.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-66.csv">
+        <entry key="/instances/simple/26/81.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-69.csv">
+        <entry key="/instances/simple/26/97.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-74.csv">
+        <entry key="/instances/simple/28/1.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-78.csv">
+        <entry key="/instances/simple/28/2.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-79.csv">
+        <entry key="/instances/simple/28/33.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/instances/suspect-sol-9.csv">
+        <entry key="/instances/simple/28/47.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/instances/simple/28/49.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/instances/simple/28/52.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/instances/simple/28/63.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/instances/simple/28/93.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/instances/simple/28/95.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
