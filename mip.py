@@ -36,10 +36,10 @@ def solve(jobs: list[Job],
             for j in indexes[1:]:
                 m.addConstr(lhs=c[j], sense=gp.GRB.GREATER_EQUAL, rhs=c[j-1] + gp.quicksum(durations[i]*x[i, j] for i in indexes))
             m.setObjective(gp.quicksum(c[j] for j in indexes), gp.GRB.MINIMIZE)
-            start = time.perf_counter_ns()
+            start = time.time_ns()
             m: gp.Model
             m.optimize()
-            inc, val, elapsed = create_schedule(x, c, jobs), m.objVal, time.perf_counter_ns() - start
+            inc, val, elapsed = create_schedule(x, c, jobs), m.objVal, time.time_ns() - start
             if m.Status == gp.GRB.TIME_LIMIT:
                 raise Timeout(inc, val, elapsed)
             return inc, val, elapsed
