@@ -15,7 +15,7 @@ def solve(jobs: set[Job],
           benchmark: Info,
           warm_start: Tuple[list[JobSlice], int] = ([], sys.maxsize),
           max_time_seconds: int = 15 * 60) -> Tuple[list[JobSlice], int]:
-    max_time_ns: int = max_time_seconds * int(10e9)
+    max_time_ns: int = max_time_seconds * int(1e9)
     inc: list[JobSlice]
     val: int
     inc, val = warm_start
