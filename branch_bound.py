@@ -19,8 +19,13 @@ def solve(jobs: set[Job],
     inc: list[JobSlice]
     val: int
     inc, val = warm_start
-    queue = queue_factory([Node(scheduled=[], unscheduled=jobs)])
     start = t = time.perf_counter_ns()
+    root = Node(scheduled=[], unscheduled=jobs)
+    if root.is_feasible():
+        benchmark.set_time(time.perf_counter_ns() - start)
+        benchmark.add_node_count(1)
+        return list(root.schedule), root.value
+    queue = queue_factory([root])
     while not time_out(t - start, max_time_ns) and not queue.is_empty():
         n = queue.pop()
         if n.is_feasible() and n.value < val:
