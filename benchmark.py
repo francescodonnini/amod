@@ -1,7 +1,4 @@
-from typing import Tuple, Optional
-
 from job import Job
-from slice import JobSlice
 
 
 class Info:
@@ -17,7 +14,7 @@ class Info:
         s += 'pj\t' + '\t'.join([str(j.duration) for j in self.instance]) + '\n'
         s += f'heuristic={self.heuristic}\n'
         s += f'node_count={self.node_count}\n'
-        return s + f'time={self.time_ns / int(10e9)} s'
+        return s + f'time={self.time_ns / int(1e9)} s'
 
     def add_node_count(self, c: int):
         if c < 0:
