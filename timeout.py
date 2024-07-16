@@ -1,4 +1,3 @@
-from benchmark import Info
 from slice import JobSlice
 
 
