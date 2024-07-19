@@ -2,17 +2,13 @@ from job import Job
 
 
 class Info:
-    def __init__(self, instance: set[Job], heuristic: str):
-        self.instance = instance
+    def __init__(self, heuristic: str):
         self.heuristic = heuristic
         self.node_count = 0
         self.time_ns = 0
 
     def __str__(self):
-        s = 'job\t' + '\t'.join([j.identifier for j in self.instance]) + '\n'
-        s += 'rj\t' + '\t'.join([str(j.release_date) for j in self.instance]) + '\n'
-        s += 'pj\t' + '\t'.join([str(j.duration) for j in self.instance]) + '\n'
-        s += f'heuristic={self.heuristic}\n'
+        s = f'heuristic={self.heuristic}\n'
         s += f'node_count={self.node_count}\n'
         return s + f'time={self.time_ns / int(1e9)} s'
 

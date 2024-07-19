@@ -1,6 +1,6 @@
 import sys
 import time
-from typing import Tuple, Callable, Iterable
+from typing import Tuple, Callable, Iterable, Union
 
 from benchmark import Info
 from job import Job
@@ -12,8 +12,8 @@ from timeout import Timeout
 
 def solve(jobs: set[Job],
           queue_factory: Callable[[Iterable[Node]], NodeQueue],
-          benchmark: Info,
           warm_start: Tuple[list[JobSlice], int] = ([], sys.maxsize),
+          benchmark: Union[Info, None] = None,
           max_time_seconds: int = 15 * 60) -> Tuple[list[JobSlice], int]:
     max_time_ns: int = max_time_seconds * int(1e9)
     inc: list[JobSlice]
@@ -21,9 +21,11 @@ def solve(jobs: set[Job],
     inc, val = warm_start
     start = t = time.time_ns()
     root = Node(scheduled=[], unscheduled=jobs)
-    benchmark.add_node_count(1)
+    if benchmark is not None:
+        benchmark.add_node_count(1)
     if root.is_feasible():
-        benchmark.set_time(time.time_ns() - start)
+        if benchmark is not None:
+            benchmark.set_time(time.time_ns() - start)
         return list(root.schedule), root.value
     queue = queue_factory([root])
     while not time_out(t - start, max_time_ns) and not queue.is_empty():
@@ -34,11 +36,13 @@ def solve(jobs: set[Job],
         if not n.is_leaf():
             children: list[Node] = n.create_children()
             children = prune(children, val)
-            benchmark.add_node_count(len(children))
+            if benchmark is not None:
+                benchmark.add_node_count(len(children))
             queue.extend(children)
         t = time.time_ns()
     elapsed = t - start
-    benchmark.set_time(elapsed)
+    if benchmark is not None:
+        benchmark.set_time(elapsed)
     if time_out(elapsed, max_time_ns):
         raise Timeout(inc, val, elapsed)
     return inc, val
@@ -84,13 +88,6 @@ def thm7(m: Node, n: Node, t: int, card: int) -> bool:
     e_i: int = e(i, t)
     e_j: int = e(j, t)
     return e_i <= e_j and i.duration - j.duration <= (e_i - e_j) * card
-
-
-def delta(schedule: list[JobSlice], j: int) -> int:
-    if j == 0:
-        return -sys.maxsize
-    else:
-        return schedule[j - 1].completion_time()
 
 
 def r(i: Job, t: int) -> int:
