@@ -87,15 +87,24 @@ def heuristic(jobs: list[Job], select_job: Callable[[Iterable[Job], int], Job]) 
 
 
 def ect_rule(jobs: Iterable[Job], t: int) -> Job:
-    return min(sorted(jobs, key=lambda j: ci(j, t)), key=lambda j: ri(j, t))
+    ties: list[Job] = abstract_min(jobs, key=lambda j: ci(j, t))
+    if len(ties) > 1:
+        return min(ties, key=lambda j: ri(j, t))
+    return ties[0]
 
 
 def est_rule(jobs: Iterable[Job], t: int) -> Job:
-    return min(sorted(jobs, key=lambda j: ri(j, t)), key=lambda j: j.duration)
+    ties: list[Job] = abstract_min(jobs, key=lambda j: ri(j, t))
+    if len(ties) > 1:
+        return min(ties, key=lambda j: j.duration)
+    return ties[0]
 
 
 def prtf_rule(jobs: Iterable[Job], t: int) -> Job:
-    return min(sorted(jobs, key=lambda j: prio_rule(j, t)), key=lambda j: ri(j, t))
+    ties: list[Job] = abstract_min(jobs, key=lambda j: prio_rule(j, t))
+    if len(ties) > 1:
+        return min(ties, key=lambda j: ri(j, t))
+    return ties[0]
 
 
 def prio_rule(x: Job, t: int) -> int:
