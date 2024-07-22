@@ -19,10 +19,10 @@ def aprtf(jobs: list[Job]) -> list[JobSlice]:
         else:
             mu: int = len(unscheduled) - 2
             tau: int = smallest_release_date(unscheduled.difference({a, b}))
-            if f(a, b, t) - f(b, a, t) < mu * min(ri(a, t) - ri(b, t), ei(b, ei(a, t)) - tau):
-                x = b
-            else:
+            if f(b, a, t) - f(a, b, t) >= mu * min(ri(a, t) - ri(b, t), ei(b, ei(a, t)) - tau):
                 x = a
+            else:
+                x = b
         schedule.append(JobSlice(x, max(t, x.release_date), x.duration))
         t = ei(x, t)
         unscheduled.remove(x)
